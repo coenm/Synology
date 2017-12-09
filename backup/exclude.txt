@@ -1,0 +1,22 @@
+# More info at:
+# http://ss64.com/bash/rsync.html#exclude
+#
+
+# Skip opened files
+~$*
+
+# Skip specific Windows files
+Thumbs.db
+thumbs.db
+desktop.ini
+
+# Skip specific Mac OS 
+.DS_Store
+._.DS_Store
+
+# Skip SVN directories
+.svn/
+
+# Skip others..
+#*.bak
+
