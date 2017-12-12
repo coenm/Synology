@@ -46,31 +46,31 @@ print_header()
 
 print_help()
 {
-	echo "Usage:                                                                   "
-	echo "                                                                         "
-	echo "  $0 -s <source config> -d <destination config> [-c -p -v -q -h]         "
-	echo "                                                                         "
-	echo "	-h = Help                                                              "
-	echo "       List this help menu                                               "
-	echo "                                                                         "
-	echo "	-s = Source of rsync backup                                            "
-	echo "                                                                         " 
-	echo "	-d = Destination type of the backup (remote or local)                  "
-	echo "                                                                         "
-	echo "	-c = Checksum mode                                                     "
-	echo "       Forces sender to checksum all files before transfer.              "
-	echo "       Can be quite slow.                                                "
-    echo "                                                                         "	
-	echo "	-v = Verbose mode                                                      "
-	echo "       Run rsync command with the -v switch to use verbose output        " 
-    echo "																		   "	
-	echo "	-p = Progress mode                                                     "
-	echo "       Run rsync command with the -p switch to show the progress         " 
-	echo "																		   "
-	echo "	-q = Quiet mode                                                        "
-	echo "       Run rsync command with -q switch to suppress all output           "
-	echo "       except errors                                                     "
-	echo "																		   "
+	echo "Usage:																	"
+	echo "																			"
+	echo "	$0 -s <source config> -d <destination config> [-c -p -v -q -h]			"
+	echo "																			"
+	echo "	-h = Help																"
+	echo "       List this help menu												"
+	echo "																			"
+	echo "	-s = Source of rsync backup												"
+	echo "																			"
+	echo "	-d = Destination type of the backup (remote or local)					"
+	echo "																			"
+	echo "	-c = Checksum mode														"
+	echo "       Forces sender to checksum all files before transfer.				"
+	echo "       Can be quite slow.													"
+	echo "																			"
+	echo "	-v = Verbose mode														"
+	echo "       Run rsync command with the -v switch to use verbose output			"
+	echo "																			"
+	echo "	-p = Progress mode														"
+	echo "       Run rsync command with the -p switch to show the progress			"
+	echo "																			"
+	echo "	-q = Quiet mode															"
+	echo "       Run rsync command with -q switch to suppress all output			"
+	echo "       except errors														"
+	echo "																			"
 	echo "----------------------------------------------------------------------------"
 }
 
@@ -106,7 +106,7 @@ do
 		c ) RSYNC_MODE_CHECKSUM='--checksum ';;
 		v ) RSYNC_MODE_VERBOSE='--verbose ';;
 		q ) RSYNC_MODE_QUIET='--quiet ';;
-		p ) RSYNC_MODE_PROGRESS='--progress ';;		
+		p ) RSYNC_MODE_PROGRESS='--progress ';;	
 		
 		s ) opt_s=$OPTARG;;
 		d ) opt_d=$OPTARG;;
@@ -167,7 +167,7 @@ if [ $opt_s ]; then
 	else
 		print_header
 		echo [ERROR] Backupset config ${BACKUPSET_CONFIG_FILE} does not exist
-		exit 1		
+		exit 1
 	fi	
 
 	## Create the destination path (also the escaped variant)
