@@ -55,7 +55,7 @@ cat location_y/public_key_id_rsa.pub >> /root/.ssh/authorized_keys
 # Improve SSH Daemon configuration
 Login using SSH as root and verify/update the following settings:
 
-- Protocol2 should be enabled. `cat /etc/ssh/sshd_config | grep Protocol2`
+- Protocol2 should be enabled. `cat /etc/ssh/sshd_config | grep "Protocol 2"`
 - PubkeyAuthentication should be enabled. `cat /etc/ssh/sshd_config | grep PubkeyAuthentication`
 - PasswordAuthentication should be disabled. `cat /etc/ssh/sshd_config | grep PasswordAuthentication `. **Before disabling password authentication, make sure public key authentication works.**
 
@@ -70,7 +70,7 @@ To update:
 
 # User configuration
 Specify the users that should be able to ssh to the nas. Check the `/etc/passwd` file.
-I.e. for user `alice` you can `cat /etc/passwd | grep alice:` to check the users shell she has access to. If Alice should have access, his should be `/etc/sh`.
+I.e. for user `alice` you can `cat /etc/passwd | grep alice:` to check the users shell she has access to. If Alice should have access, his should be `/bin/sh`.
 
 To update:
 - `vi /etc/passwd`
