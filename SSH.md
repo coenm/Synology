@@ -2,7 +2,8 @@
 - Login into DSM as admin;
 - Open 'Main Menu' and navigate to 'Terminal & SNMP';
 - Check the 'Enable SSH service';
-- Optionally change the SSH port.
+- Optionally change the SSH port;
+- Go to 'Advanced Settings' and select the security level 'High'.
 
 
 # Firewall
