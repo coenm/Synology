@@ -1,5 +1,8 @@
 #!/bin/sh
 
+FILE_PASSWD=/etc/passwd
+AWK=/usr/bin/awk
+
 print_header()
 {
 	echo ""
@@ -45,8 +48,34 @@ fi
 if [ $opt_u ]; then
 	# Inspired by https://andidittrich.de/2016/03/howto-re-enable-scpssh-login-on-synology-dsm-6-0-for-non-admin-users.html
 	echo Enable ssh access for ${opt_u}
- 	/usr/bin/awk -i inplace -v username=${opt_u} -F: 'BEGIN{OFS=":"} username==$1 {gsub(/.*/,"/bin/sh",$7)}1' /etc/passwd
-	echo Done.
+
+	COUNT=$(${AWK} -v username=${opt_u} -F: 'username==$1' ${FILE_PASSWD} | wc -l)
+
+	if [ $COUNT == 1 ]; then
+
+		echo User ${opt_u} found. Verify users shell...
+		USER_SHELL=$(${AWK} -v username=${opt_u} -F: 'username==$1 { print $7 }' ${FILE_PASSWD} )
+
+		if [ $USER_SHELL == '/bin/sh' ]; then
+			
+			echo User has already right shell.
+			echo Done.
+			exit 1
+
+		else
+
+			echo Change users shell from ${USER_SHELL} to /bin/sh
+			${AWK} -i inplace -v username=${opt_u} -F: 'BEGIN{OFS=":"} username==$1 {gsub(/.*/,"/bin/sh",$7)}1' ${FILE_PASSWD}
+			echo Done.
+			exit 1
+
+		fi
+
+	else
+
+		echo Ooeps, ${COUNT} lines found for this username. Manual action required.
+		exit 2
+	fi
 
 else
 
