@@ -11,9 +11,17 @@
 # default value.
 
 # This is the original Synology sshd config with some minor adjustments.
+# Source https://stribika.github.io/2015/01/04/secure-secure-shell.html
 
 # Fix: Only support protocol 2, instead of default 1,2
 Protocol 2
+
+# Fix: Key exchange algorithms
+# - remove algorithms with sha1 as hash function;
+# - remove 1024 DH;
+# - remove NIST curves.
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+
 
 #Port 22
 #AddressFamily any
