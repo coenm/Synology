@@ -10,6 +10,11 @@
 # possible, but leave them commented.  Uncommented options override the
 # default value.
 
+# This is the original Synology sshd config with some minor adjustments.
+
+# Fix: Only support protocol 2, instead of default 1,2
+Protocol 2
+
 #Port 22
 #AddressFamily any
 #ListenAddress 0.0.0.0
