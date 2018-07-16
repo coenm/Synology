@@ -22,16 +22,17 @@ Protocol 2
 # - remove NIST curves.
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
 
-
 #Port 22
 #AddressFamily any
 #ListenAddress 0.0.0.0
 #ListenAddress ::
 
-#HostKey /etc/ssh/ssh_host_rsa_key
-#HostKey /etc/ssh/ssh_host_dsa_key
-#HostKey /etc/ssh/ssh_host_ecdsa_key
-#HostKey /etc/ssh/ssh_host_ed25519_key
+# Fix: Server authentication
+# - Disable DSA with SHA1 (key size must be 1024)
+# - Disable ECDSA with SHAx (NIST)
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+
 
 # Ciphers and keying
 #RekeyLimit default none
