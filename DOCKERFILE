@@ -9,22 +9,33 @@ RUN apt-get -yqq update && apt-get -yqq install openssh-server && apt-get -yqq i
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:welkom123' | chpasswd
-RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-#RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-#RUN sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+#RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+#RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+
+ADD sshd/fixed_sshd_config /etc/ssh/sshd_config
+
 
 # ??
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 # https://stackoverflow.com/questions/27701930/add-user-to-docker-container
-RUN useradd -ms /bin/bash backup
-RUN echo 'backup:welkom' | chpasswd    
+RUN useradd -ms /bin/bash dockerbackup
+RUN echo 'dockerbackup:welkom' | chpasswd    
 
 
-
+VOLUME [ "/home/dockerbackup/.ssh/" ]
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
+
+# https://github.com/moby/moby/issues/6396
+# http://www.inanzzz.com/index.php/post/qdil/creating-a-ssh-server-with-openssh-by-using-docker-compose-and-connecting-to-it-with-php
+
+# --mount type=bind,source="${HOME}/.ssh/",target="/root/.ssh/",readonly
+# --mount type=bind,source="${HOME}/.ssh/",target="/home/dockerbackup/.ssh/",readonly
+# --mount type=bind,source="/C/Users/coen/docker/ssh/",target="/home/dockerbackup/.ssh/",readonly
+# C/Users/coen/docker/ssh
