@@ -1,7 +1,15 @@
 FROM ubuntu:18.04
-LABEL Maintainer="Coen van den Munckhof" Source="https://github.com/coenm/Synology"
 
-ENV REFRESHED_AT 2019-11-04
+LABEL maintainer="Coen van den Munckhof" \
+  org.label-schema.name="Server" \
+  org.label-schema.description="SSH Rsync backup server for Synology NAS" \
+  org.label-schema.url="https://github.com/coenm/Synology" \
+  org.label-schema.vcs-url="https://github.com/coenm/Synology" \
+  org.label-schema.vendor="CoenM" \
+  org.label-schema.schema-version="1.0"
+
+
+ENV REFRESHED_AT 2019-11-05
 RUN apt-get -yqq update && apt-get -yqq install openssh-server && apt-get -yqq install rsync
 
 #Enable the ssh service by typing sudo systemctl enable ssh
@@ -28,14 +36,25 @@ RUN useradd -ms /bin/bash dockerbackup
 RUN echo 'dockerbackup:welkom' | chpasswd    
 
 
-VOLUME [ "/home/dockerbackup/.ssh/" ]
+VOLUME [ "/backup" ]
+
+# VOLUME [ "/home/dockerbackup/.ssh/" ]
+VOLUME [ "/tmp/.ssh/" ]
+
+# https://nickjanetakis.com/blog/docker-tip-56-volume-mounting-ssh-keys-into-a-docker-container
+COPY entrypoint.sh /bin/docker-entrypoint.sh
+RUN chmod +x /bin/docker-entrypoint.sh 
+
 EXPOSE 22
+ENTRYPOINT ["/bin/docker-entrypoint.sh"]
 CMD ["/usr/sbin/sshd", "-D"]
 
 # https://github.com/moby/moby/issues/6396
 # http://www.inanzzz.com/index.php/post/qdil/creating-a-ssh-server-with-openssh-by-using-docker-compose-and-connecting-to-it-with-php
 
-# --mount type=bind,source="${HOME}/.ssh/",target="/root/.ssh/",readonly
-# --mount type=bind,source="${HOME}/.ssh/",target="/home/dockerbackup/.ssh/",readonly
-# --mount type=bind,source="/C/Users/coen/docker/ssh/",target="/home/dockerbackup/.ssh/",readonly
-# C/Users/coen/docker/ssh
+# docker stop server
+# docker container rm server
+# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/home/dockerbackup/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" coenm/server:v1.3
+# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" coenm/server:v1.4
+
+# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --rm coenm/server:v1.9
