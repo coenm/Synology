@@ -2,17 +2,36 @@
 
 set -e
 
-# cp -R /tmp/.ssh /root/.ssh
-# chmod 700 /root/.ssh
-# chmod 644 /root/.ssh/id_rsa.pub
-# chmod 600 /root/.ssh/id_rsa
+if [[ -z ${SSH_USERNAME} ]]; then
+    echo "SSH_USERNAME environment variable not set."
+    exit -100  
+fi
 
-cp -R /tmp/.ssh /home/dockerbackup/.ssh
-chown -R dockerbackup:dockerbackup /home/dockerbackup/.ssh
-chmod 700 /home/dockerbackup/.ssh
-chmod 600 /home/dockerbackup/.ssh/authorized_keys
+if [[ ! -f "/home/${SSH_USERNAME}/" ]]; then
+    echo "home directory does't exist."
+    exit -101  
+fi
 
-# chmod 644 /home/dockerbackup/.ssh/id_rsa.pub
-# chmod 600 /home/dockerbackup/.ssh/id_rsa
+if [[ ! -f "/tmp/.ssh/authorized_keys" ]]; then
+    echo "no authorized keys file found."
+    exit -102  
+fi
+
+if [[ -z ${BACKUP_DESTINATION} ]]; then
+    echo "BACKUP_DESTINATION environment variable not set."
+    exit -103
+fi
+
+
+# copy and set permissions.
+cp -R /tmp/.ssh /home/${SSH_USERNAME}/.ssh
+chown -R ${SSH_USERNAME}:${SSH_USERNAME} /home/${SSH_USERNAME}/.ssh
+chmod 700 /home/${SSH_USERNAME}/.ssh
+chmod 600 /home/${SSH_USERNAME}/.ssh/authorized_keys
+# chmod 644 /home/${SSH_USERNAME}/.ssh/id_rsa.pub
+# chmod 600 /home/${SSH_USERNAME}/.ssh/id_rsa
+
+# set permissions for backup dir
+# TODOOOO: also find out what permissions
 
 exec "$@"

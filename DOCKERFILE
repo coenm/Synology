@@ -9,37 +9,30 @@ LABEL maintainer="Coen van den Munckhof" \
   org.label-schema.schema-version="1.0"
 
 
-ENV REFRESHED_AT 2019-11-05
-RUN apt-get -yqq update && apt-get -yqq install openssh-server && apt-get -yqq install rsync
+ENV REFRESHED_AT 2019-11-07-9
+ENV SSH_USERNAME dockerbackup
 
-#Enable the ssh service by typing sudo systemctl enable ssh
-#Start the ssh service by typing sudo systemctl start ssh
+RUN apt-get -yqq update && \
+    apt-get -yqq install openssh-server && \
+    apt-get -yqq install rsync 
 
 RUN mkdir /var/run/sshd
-RUN echo 'root:welkom123' | chpasswd
+
 #RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# SSH login fix. Otherwise user is kicked off after login
-#RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-RUN cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
 
 ADD sshd/fixed_sshd_config /etc/ssh/sshd_config
 
-
-# ??
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
-
 # https://stackoverflow.com/questions/27701930/add-user-to-docker-container
-RUN useradd -ms /bin/bash dockerbackup
-RUN echo 'dockerbackup:welkom' | chpasswd    
+RUN useradd -ms /bin/bash ${SSH_USERNAME}
 
-
+ENV BACKUP_DESTINATION /backup
 VOLUME [ "/backup" ]
 
-# VOLUME [ "/home/dockerbackup/.ssh/" ]
 VOLUME [ "/tmp/.ssh/" ]
+
+# https://stackoverflow.com/questions/36292317/why-set-visible-now-in-etc-profile
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
 
 # https://nickjanetakis.com/blog/docker-tip-56-volume-mounting-ssh-keys-into-a-docker-container
 COPY entrypoint.sh /bin/docker-entrypoint.sh
@@ -52,9 +45,6 @@ CMD ["/usr/sbin/sshd", "-D"]
 # https://github.com/moby/moby/issues/6396
 # http://www.inanzzz.com/index.php/post/qdil/creating-a-ssh-server-with-openssh-by-using-docker-compose-and-connecting-to-it-with-php
 
-# docker stop server
-# docker container rm server
-# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/home/dockerbackup/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" coenm/server:v1.3
-# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" coenm/server:v1.4
-
+# docker exec -ti server /bin/bash
 # docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --rm coenm/server:v1.9
+# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" --rm coenm/server:v1.10
