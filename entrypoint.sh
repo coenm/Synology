@@ -24,7 +24,9 @@ fi
 
 
 # copy and set permissions.
-cp -R /tmp/.ssh /home/${SSH_USERNAME}/.ssh
+mkdir -p /home/${SSH_USERNAME}/.ssh
+cp /tmp/.ssh/authorized_keys /home/${SSH_USERNAME}/.ssh/
+#cp -R /tmp/.ssh /home/${SSH_USERNAME}/.ssh
 chown -R ${SSH_USERNAME}:${SSH_USERNAME} /home/${SSH_USERNAME}/.ssh
 chmod 700 /home/${SSH_USERNAME}/.ssh
 chmod 600 /home/${SSH_USERNAME}/.ssh/authorized_keys

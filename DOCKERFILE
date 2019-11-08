@@ -9,7 +9,7 @@ LABEL maintainer="Coen van den Munckhof" \
   org.label-schema.schema-version="1.0"
 
 
-ENV REFRESHED_AT 2019-11-07-9
+ENV REFRESHED_AT 2019-11-08
 ENV SSH_USERNAME dockerbackup
 
 RUN apt-get -yqq update && \
@@ -48,3 +48,10 @@ CMD ["/usr/sbin/sshd", "-D"]
 # docker exec -ti server /bin/bash
 # docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --rm coenm/server:v1.9
 # docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" --rm coenm/server:v1.10
+
+# docker desktop
+# docker run -d -p 22222:22 --name server --mount type=bind,source="D:/Docker/BackupServer/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="D:/Docker/BackupServer/backup/",target="/backup/" --rm coenm/server:2.0
+# docker run -d -p 22222:22 --name server --mount type=bind,source="/D/Docker/BackupServer/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/D/Docker/BackupServer/backup/",target="/backup/" --rm coenm/server:2.0
+
+
+# docker run -ti --name ubuntu --mount type=bind,source="/D/Docker/UbuntuShare",target="/WindowsShare/" ubuntu:latest /bin/bash
