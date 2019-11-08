@@ -5,7 +5,7 @@
 #
 #
 
-# If desitination is to a local path, set DEST_IS_REMOTE to 0, else if the destination is to a remote location, set this variable to 1.
+# If destination is to a local path, set DEST_IS_REMOTE to 0, else if the destination is to a remote location, set this variable to 1.
 # For remote communication, SSH is used.
 DEST_IS_REMOTE=1
 
