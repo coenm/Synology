@@ -24,16 +24,16 @@ RUN apt-get -yqq update && \
 
 VOLUME [ "/source" ]
 VOLUME [ "/tmp/.ssh/" ]
-
+VOLUME [ "/logs" ]
 
 # https://nickjanetakis.com/blog/docker-tip-56-volume-mounting-ssh-keys-into-a-docker-container
 COPY . /bin/backup
-# RUN chmod +x /bin/backup/backup.sh 
+RUN chmod +x /bin/backup/backup/backup.sh 
 
-# ENTRYPOINT ["/bin/backup/backup.sh"]
-CMD ["bin/bash"]
+ENTRYPOINT ["/bin/backup/backup/backup.sh"]
+CMD ["-h"]
 
-# -o StrictHostKeyChecking=fals
+# -o StrictHostKeyChecking=false
 
 # https://github.com/moby/moby/issues/6396
 # http://www.inanzzz.com/index.php/post/qdil/creating-a-ssh-server-with-openssh-by-using-docker-compose-and-connecting-to-it-with-php

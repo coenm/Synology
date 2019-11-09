@@ -49,6 +49,11 @@ CMD ["/usr/sbin/sshd", "-D"]
 # docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --rm coenm/server:v1.9
 # docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" --rm coenm/server:v1.10
 
+# client
+# docker build -t coenm/client:1.0 -f client.DOCKERFILE .
+# docker run --name client --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/source/",target="/source/",readonly --rm -ti coenm/client:1.0 /bin/bash
+# docker run --name client --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/source/",target="/source/",readonly --rm coenm/client:1.0
+
 # docker desktop
 # docker run -d -p 22222:22 --name server --mount type=bind,source="D:/Docker/BackupServer/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="D:/Docker/BackupServer/backup/",target="/backup/" --rm coenm/server:2.0
 # docker run -d -p 22222:22 --name server --mount type=bind,source="/D/Docker/BackupServer/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/D/Docker/BackupServer/backup/",target="/backup/" --rm coenm/server:2.0

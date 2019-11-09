@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+# ! /bin/sh
 
 
 #***************************************************************
@@ -153,6 +155,7 @@ fi
 	
 BACKUP_DIR=$DEST_BACKUP_DIR
 
+echo "-- BACKUP_DIR: ${BACKUP_DIR}"
 
  
 #***************************************************************
@@ -173,6 +176,9 @@ if [ $opt_s ]; then
 	## Create the destination path (also the escaped variant)
 	DESTINATION_DIR=${DEST_BACKUP_DIR}/${BACKUP_NAME}
 	DESTINATION_DIR_ESCAPED=${DESTINATION_DIR// /\\ }
+
+	echo "-- DESTINATION_DIR: ${DESTINATION_DIR}"
+	echo "-- DESTINATION_DIR_ESCAPED: ${DESTINATION_DIR_ESCAPED}"
 
 else
 
@@ -225,15 +231,20 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 		exit 1
 	fi
 	SSH_KEY='-i '${DEST_KEYFILE}		
-		
+	echo "-- SSH_KEY: ${SSH_KEY}"
 			
 	echo Start remote backup >> ${LOG_FILE_BUSY}
 	echo >> ${LOG_FILE_BUSY}
 
 	echo Create working dir for backup >> ${LOG_FILE_BUSY}
 	
+			
+	echo "-- SSH_PORT: ${SSH_PORT}"		
+	echo "-- DEST_USER: ${DEST_USER}"		
+	echo "-- DEST_HOST: ${DEST_HOST}"
+
 	ssh \
-		$SSH_PORT $SSH_KEY ${DEST_USER}@${DEST_HOST} \
+		"-o StrictHostKeyChecking=false " $SSH_PORT $SSH_KEY ${DEST_USER}@${DEST_HOST} \
 		"mkdir -p \"$DESTINATION_DIR/incomplete/\" && mkdir -p \"$DESTINATION_DIR/partial/\""
 		
 	echo >> ${LOG_FILE_BUSY}
@@ -249,7 +260,7 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 		$RSYNC_MODE_QUIET \
 		${RSYNC_DEFAULT_OPTIONS} \
 		${RSYNC_EXCLUDES} \
-		-e 'ssh -p '${DEST_PORT}' -i'${DEST_KEYFILE} \
+		-e 'ssh -o StrictHostKeyChecking=false -p '${DEST_PORT}' -i'${DEST_KEYFILE} \
 		--link-dest="${DESTINATION_DIR_ESCAPED}/current"  \
 		"${BACKUP_SOURCE_DIR}" \
 		${DEST_USER}@${DEST_HOST}:"${DESTINATION_DIR_ESCAPED}/incomplete/" >> ${LOG_FILE_BUSY} 2>&1
@@ -261,7 +272,7 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 	echo >> ${LOG_FILE_BUSY}
 	
 	ssh \
-		$SSH_PORT $SSH_KEY ${DEST_USER}@${DEST_HOST} \
+		"-o StrictHostKeyChecking=false " $SSH_PORT $SSH_KEY ${DEST_USER}@${DEST_HOST} \
 		"cd \"$DESTINATION_DIR\" &&  mv incomplete/ $DATETIME_START/ && rm -rf current && ln -s $DATETIME_START current && rm -rf partial"
 	
 else
