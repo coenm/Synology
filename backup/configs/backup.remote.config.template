@@ -10,11 +10,6 @@
 DEST_IS_REMOTE=1
 
 
-# Destination base directory to store the backup.
-# Should be an absolute path. If the backup is on a remote machine. Do not enter a path like user@host:/path/to/store/backup
-DEST_BACKUP_DIR=/volume1/just/an/example/path
-
-
 #
 #
 # If DEST_IS_REMOTE is set to 0 (ie, it is a local backup), you can leave the following variables empty as they are.

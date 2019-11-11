@@ -8,28 +8,3 @@
 # If destination is to a local path, set DEST_IS_REMOTE to 0, else if the destination is to a remote location, set this variable to 1.
 # For remote communication, SSH is used.
 DEST_IS_REMOTE=0
-
-
-# Destination base directory to store the backup.
-# Should be an absolute path. If the backup is on a remote machine. Do not enter a path like user@host:/path/to/store/backup
-DEST_BACKUP_DIR=/volume1/just/an/example/path
-
-
-#
-#
-# If DEST_IS_REMOTE is set to 0 (ie, it is a local backup), you can leave the following variables empty as they are.
-# 
-#
-
-
-# Hostname of remote machine. Can be IP4 or hostname.
-DEST_HOST=
-
-# Remote username. This user should exist on the remote machine, should have SSH access with public key authorization enabled.
-DEST_USER=
-
-# Keyfile for authenticating DEST_USER on the DEST_HOST. This should point to an existing private key file.
-DEST_KEYFILE=
-
-# Destination SSH port of the remote machine. Normally SSH runs on port 22 but this property allows others.
-DEST_PORT=

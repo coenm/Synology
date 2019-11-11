@@ -4,7 +4,7 @@
 
 
 #***************************************************************
-VERSION="2017.12.07"
+VERSION="2019.11.11"
 
 DATETIME_START="$(date +"%Y.%m.%d-%H.%M.%S")"
 
@@ -147,11 +147,10 @@ else
 	exit 1	
 fi
 	
-BACKUP_DIR=$DEST_BACKUP_DIR
+# Destination base directory to store the backup.
+# Should be an absolute path. If the backup is on a remote machine. Do not enter a path like user@host:/path/to/store/backup
+BACKUP_DIR=/backup
 
-echo "-- BACKUP_DIR: ${BACKUP_DIR}"
-
- 
 #***************************************************************
 # Source
 #***************************************************************
@@ -168,7 +167,7 @@ if [ $opt_s ]; then
 	fi	
 
 	## Create the destination path (also the escaped variant)
-	DESTINATION_DIR=${DEST_BACKUP_DIR}/${BACKUP_NAME}
+	DESTINATION_DIR=${BACKUP_DIR}/${BACKUP_NAME}
 	DESTINATION_DIR_ESCAPED=${DESTINATION_DIR// /\\ }
 
 	echo "-- DESTINATION_DIR: ${DESTINATION_DIR}"
