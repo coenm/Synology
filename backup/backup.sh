@@ -8,7 +8,6 @@ VERSION="2017.12.07"
 
 DATETIME_START="$(date +"%Y.%m.%d-%H.%M.%S")"
 
-
 # Default backup excludes and default options.
 RSYNC_EXCLUDE_DSM='--exclude=#recycle/ --exclude=@eaDir/'
 RSYNC_EXCLUDE_MAC='--exclude=.Trashes/ --exclude=.TemporaryItems/'
@@ -91,7 +90,7 @@ RSYNC_EXCLUDE_FILES=${RSYNC_EXCLUDE_FILES_ARRAY[@]}
 echo RSYNC_EXCLUDE_FILES: ${RSYNC_EXCLUDE_FILES}
 
 #Wrapping up the excludes
-RSYNC_EXCLUDES="$RSYNC_EXCLUDE_DSM $RSYNC_EXCLUDE_MAC $RSYNC_EXCLUDE_FILES2"
+RSYNC_EXCLUDES="$RSYNC_EXCLUDE_DSM $RSYNC_EXCLUDE_MAC $RSYNC_EXCLUDE_FILES"
 
 
 #***************************************************************
