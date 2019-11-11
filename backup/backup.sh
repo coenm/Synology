@@ -23,8 +23,7 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
 # not sure if it should end with /
-# CONFIG_DIR=configs/
-CONFIG_DIR=configs
+CONFIG_DIR=config
 
 echo $SCRIPTPATH
 echo $CONFIG_DIR
@@ -78,9 +77,12 @@ print_help()
 CONFIG_LOG_DIR_BUSY=/logs/busy
 CONFIG_LOG_DIR_FINISHED=/logs
 
+mkdir -p $CONFIG_LOG_DIR_BUSY
+mkdir -p $CONFIG_LOG_DIR_FINISHED
+
 # https://stackoverflow.com/questions/9612090/how-to-loop-through-file-names-returned-by-find
 # find /config -name "exclude_*.config"
-for i in config/exclude_*.config; do # Whitespace-safe but not recursive.
+for i in $(find /config -name "exclude_*.config"); do
     echo "Found exclude file: $i"
 	RSYNC_EXCLUDE_FILES_ARRAY+=( --exclude-from "$i" )
 done
@@ -244,7 +246,7 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 	
 	echo Start RSync >> ${LOG_FILE_BUSY}
 	echo >> ${LOG_FILE_BUSY}
-	echo ${DESTINATION_DIR_ESCAPED}  >> ${LOG_FILE_BUSY}
+	echo DESTINATION_DIR_ESCAPED: ${DESTINATION_DIR_ESCAPED} >> ${LOG_FILE_BUSY}
 	
 	rsync \
 		$RSYNC_MODE_CHECKSUM \
