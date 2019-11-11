@@ -22,13 +22,12 @@ RSYNC_DEFAULT_OPTIONS='--hard-links --delete --delete-excluded --archive --chmod
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-CONFIG_DIR=${SCRIPTPATH}/configs
+# not sure if it should end with /
+# CONFIG_DIR=configs/
+CONFIG_DIR=configs
 
 echo $SCRIPTPATH
 echo $CONFIG_DIR
-
-#file containing global information 
-GLOBAL_CONFIG=global.config
 
 
 #***************************************************************
@@ -76,27 +75,21 @@ print_help()
 	echo "----------------------------------------------------------------------------"
 }
 
+CONFIG_LOG_DIR_BUSY=/logs/busy
+CONFIG_LOG_DIR_FINISHED=/logs
 
-if [ ! -f ${SCRIPTPATH}/${GLOBAL_CONFIG} ]; then
-	print_header
-	echo [ERROR] File ${SCRIPTPATH}/${GLOBAL_CONFIG} does not exist.
-	echo
-	print_help
-	exit 1
-fi
+# https://stackoverflow.com/questions/9612090/how-to-loop-through-file-names-returned-by-find
+# find /config -name "exclude_*.config"
+for i in config/exclude_*.config; do # Whitespace-safe but not recursive.
+    echo "Found exclude file: $i"
+	RSYNC_EXCLUDE_FILES_ARRAY+=( --exclude-from "$i" )
+done
 
-# At this moment, I know I can trust global.config
-# TODO: security check
-source ${SCRIPTPATH}/${GLOBAL_CONFIG}
-
-# assume this is an absolute dir.
-if [ -f ${CONFIG_EXCLUDE_FILE} ]; then
-	CONFIG_EXCLUDE_FILE='--exclude-from '${CONFIG_EXCLUDE_FILE}
-fi	
+RSYNC_EXCLUDE_FILES=${RSYNC_EXCLUDE_FILES_ARRAY[@]}
+echo RSYNC_EXCLUDE_FILES: ${RSYNC_EXCLUDE_FILES}
 
 #Wrapping up the excludes
-RSYNC_EXCLUDES="$RSYNC_EXCLUDE_DSM $RSYNC_EXCLUDE_MAC $CONFIG_EXCLUDE_FILE"
-
+RSYNC_EXCLUDES="$RSYNC_EXCLUDE_DSM $RSYNC_EXCLUDE_MAC $RSYNC_EXCLUDE_FILES2"
 
 
 #***************************************************************

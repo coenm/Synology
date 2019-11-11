@@ -16,24 +16,31 @@ RUN apt-get -yqq update && \
     apt-get -yqq install ssh && \
     apt-get -yqq install rsync 
 
-# RUN mkdir /var/run/sshd
-
-#RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-# ADD sshd/fixed_sshd_config /etc/ssh/sshd_config
-
+# ReadOnly permission
+# Source for backup
 VOLUME [ "/source" ]
+
+# ReadOnly permission
+# Should contain users private key, and public key of the host.
+# For now, we don't check the HostKey (-o StrictHostKeyChecking=false) but for the next version
+# this docker container will create a KnownHost file using the key (and address)
 VOLUME [ "/tmp/.ssh/" ]
+
+# ReadOnly permission
+# Legacy: Contains configuration for backup.
+VOLUME [ "/config" ]
+
+# Read/Write permission
+# Legacy: Backup process writes logs to this folder.
 VOLUME [ "/logs" ]
 
 # https://nickjanetakis.com/blog/docker-tip-56-volume-mounting-ssh-keys-into-a-docker-container
-COPY . /bin/backup
-RUN chmod +x /bin/backup/backup/backup.sh 
+COPY ./backup /bin/backup
+RUN chmod +x /bin/backup/backup.sh 
 
-ENTRYPOINT ["/bin/backup/backup/backup.sh"]
+ENTRYPOINT ["/bin/backup/backup.sh"]
 CMD ["-h"]
 
-# -o StrictHostKeyChecking=false
 
 # https://github.com/moby/moby/issues/6396
 # http://www.inanzzz.com/index.php/post/qdil/creating-a-ssh-server-with-openssh-by-using-docker-compose-and-connecting-to-it-with-php
