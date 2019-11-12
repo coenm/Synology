@@ -1,2 +1,0 @@
-# Keyfile for authenticating DEST_USER on the DEST_HOST. This should point to an existing private key file.
-DEST_KEYFILE=/volume1/backup/key/id_rsa

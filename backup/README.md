@@ -26,7 +26,7 @@ docker build -t coenm/client:1.0 -f client.DOCKERFILE .
 
 docker image rm coenm/client:1.0
 
-docker run --name client --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/source/",target="/source/",readonly --mount type=bind,source="/c/Users/coen/docker/logs/",target="/logs/" --mount type=bind,source="/c/Users/coen/docker/config/",target="/config/",readonly --rm --network=rsync coenm/client:1.0 -n backup_name -d docker -p -v -H server -P 22
+docker run --name client --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/source/",target="/source/",readonly --mount type=bind,source="/c/Users/coen/docker/logs/",target="/logs/" --mount type=bind,source="/c/Users/coen/docker/config/",target="/config/",readonly --rm --network=rsync coenm/client:1.0 -n backup_name -p -v -H server -P 22 -I /tmp/.ssh/id_ed25519
 
 docker container rm -f client
 

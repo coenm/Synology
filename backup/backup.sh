@@ -47,14 +47,12 @@ print_help()
 {
 	echo "Usage:																	"
 	echo "																			"
-	echo "	$0 -n name -d <destination config> [-H <host> [-P <port>]] [-c -p -v -q -h]	"
+	echo "	$0 -n name [-H <host> -I <identity file> [-P <port>]] [-c -p -v -q -h]	"
 	echo "																			"
 	echo "	-h = Help																"
 	echo "       List this help menu												"
 	echo "																			"
 	echo "	-n = Name of the backup (used as root folder in backup destination).    "
-	echo "																			"
-	echo "	-d = Destination type of the backup (remote or local)					"
 	echo "																			"
 	echo "	-c = Checksum mode														"
 	echo "       Forces sender to checksum all files before transfer.				"
@@ -75,6 +73,9 @@ print_help()
 	echo "																			"
 	echo "	-P = SSH Port (for remote backup)										"
 	echo "       Destination SSH port of the remote machine (default 22).	     	"
+	echo "																			"
+	echo "	-I = Identity file (for remote backup)									"
+	echo "       RSA or EC private key.                                  	     	"
 	echo "																			"
 	echo "----------------------------------------------------------------------------"
 # . Normally SSH runs on port 22 but this property allows others.
@@ -104,7 +105,7 @@ opt_cap_p=22
 #***************************************************************
 # Get Options from the command line  
 #***************************************************************
-while getopts "n:d:H:P:hcvpq" options
+while getopts "n:H:P:I:hcvpq" options
 do
 	case $options in 
 		c ) RSYNC_MODE_CHECKSUM='--checksum ';;
@@ -113,13 +114,13 @@ do
 		p ) RSYNC_MODE_PROGRESS='--progress ';;	
 		
 		n ) opt_n=$OPTARG;;
-		d ) opt_d=$OPTARG;;
 
 		H ) 
 		    opt_cap_h=$OPTARG
 		    DO_REMOTE=1
 		    ;;
 		P ) opt_cap_p=$OPTARG;;
+		I ) opt_cap_i=$OPTARG;;
 
 		h ) opt_h=1;;
 		* ) opt_h=1;;
@@ -138,27 +139,27 @@ if [ $opt_h ]; then
 fi 
 
 
-#***************************************************************
-# Destination 
-#***************************************************************
-if [ $opt_d ]; then
+# #***************************************************************
+# # Destination 
+# #***************************************************************
+# if [ $opt_d ]; then
 
-	DESTINATION_CONFIG_FILE=backup.${opt_d}.config
-	if [ -f ${CONFIG_DIR}/${DESTINATION_CONFIG_FILE} ]; then
-		source ${CONFIG_DIR}/${DESTINATION_CONFIG_FILE}
-		# TODO: check if the DESTINATION_CONFIG_FILE file contains the required variables and check their values.
-	else
-		print_header
-		echo [ERROR] Destination config ${DESTINATION_CONFIG_FILE} does not exist.
-		exit 1
-	fi
-else
-	print_header
-	echo [ERROR] Destination config -d is empty
-	echo
-	print_help
-	exit 1	
-fi
+# 	DESTINATION_CONFIG_FILE=backup.${opt_d}.config
+# 	if [ -f ${CONFIG_DIR}/${DESTINATION_CONFIG_FILE} ]; then
+# 		source ${CONFIG_DIR}/${DESTINATION_CONFIG_FILE}
+# 		# TODO: check if the DESTINATION_CONFIG_FILE file contains the required variables and check their values.
+# 	else
+# 		print_header
+# 		echo [ERROR] Destination config ${DESTINATION_CONFIG_FILE} does not exist.
+# 		exit 1
+# 	fi
+# else
+# 	print_header
+# 	echo [ERROR] Destination config -d is empty
+# 	echo
+# 	print_help
+# 	exit 1	
+# fi
 	
 # Destination base directory to store the backup.
 # Should be an absolute path. If the backup is on a remote machine. Do not enter a path like user@host:/path/to/store/backup
@@ -220,6 +221,7 @@ echo Started at $DATETIME_START using backupscript $VERSION >> ${LOG_FILE_BUSY}
 echo "-- DO_REMOTE: ${DO_REMOTE}"
 echo "-- opt_cap_h: ${opt_cap_h}"
 echo "-- opt_cap_p: ${opt_cap_p}"
+echo "-- opt_cap_i: ${opt_cap_i}"
 
 if [ $DO_REMOTE -eq 1 ]; then
 
@@ -229,6 +231,14 @@ if [ $DO_REMOTE -eq 1 ]; then
 	SSH_PORT='-p '$DEST_PORT	
 
 	# Check if private key file exists. If not -> quit backup.
+	DEST_KEYFILE=${opt_cap_i}
+	if [ -z $DEST_KEYFILE ]; then
+		echo [ERROR] Private key not set.
+		echo
+		print_help
+		exit 1
+	fi
+	
 	if [ ! -f ${DEST_KEYFILE} ]; then
 		echo [ERROR] Cannot backup to remote because the private key ${DEST_KEYFILE} does not exist.
 		echo

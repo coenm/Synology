@@ -1,6 +1,0 @@
-#
-#
-# Destination config file for the backup script.
-# Include this file by calling the script with the -d <this name without the prefix 'backup.' and suffix '.config'> option.
-#
-# 
