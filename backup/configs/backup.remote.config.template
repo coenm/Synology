@@ -1,13 +1,2 @@
-#
-#
-# Destination config file for the backup script.
-# Include this file by calling the script with the -d <this name without the prefix 'backup.' and suffix '.config'> option.
-#
-#
-
-# If destination is to a local path, set DEST_IS_REMOTE to 0, else if the destination is to a remote location, set this variable to 1.
-# For remote communication, SSH is used.
-DEST_IS_REMOTE=1
-
 # Keyfile for authenticating DEST_USER on the DEST_HOST. This should point to an existing private key file.
 DEST_KEYFILE=/volume1/backup/key/id_rsa

@@ -221,7 +221,7 @@ echo "-- DO_REMOTE: ${DO_REMOTE}"
 echo "-- opt_cap_h: ${opt_cap_h}"
 echo "-- opt_cap_p: ${opt_cap_p}"
 
-if [ $DEST_IS_REMOTE -eq 1 ]; then
+if [ $DO_REMOTE -eq 1 ]; then
 
 	DEST_HOST=${opt_cap_h}
 
