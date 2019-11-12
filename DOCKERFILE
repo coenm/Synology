@@ -22,10 +22,14 @@ RUN mkdir /var/run/sshd
 
 ADD sshd/fixed_sshd_config /etc/ssh/sshd_config
 
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN groupadd -r -g 2999 ${SSH_USERNAME} && \
+    useradd -ms /bin/bash -r -g ${SSH_USERNAME} -u 2999 ${SSH_USERNAME}
 # https://stackoverflow.com/questions/27701930/add-user-to-docker-container
-RUN useradd -ms /bin/bash ${SSH_USERNAME}
 
 ENV BACKUP_DESTINATION /backup
+RUN mkdir -p /backup && \
+    chown ${SSH_USERNAME}:${SSH_USERNAME} /backup
 VOLUME [ "/backup" ]
 
 VOLUME [ "/tmp/.ssh/" ]

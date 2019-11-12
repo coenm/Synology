@@ -41,6 +41,12 @@ docker build -t coenm/server:1.0 .
 
 docker image rm coenm/server:1.0
 
-docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" --rm coenm/server:1.0
+docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" --rm --network=rsync coenm/server:1.0
+
+docker volume create rsync_data
+
+docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount source="rsync_data",target="/backup/" --rm --network=rsync coenm/server:1.0
+
+
 
 ```
