@@ -155,7 +155,6 @@ BACKUP_DIR=/backup
 # Name of backup
 #***************************************************************
 if [ ! -z $opt_n ]; then
-	# if [ $opt_n ]; then
 
 	BACKUP_NAME=$opt_n
 	echo "-- BACKUP_NAME: ${BACKUP_NAME}"
@@ -163,7 +162,7 @@ if [ ! -z $opt_n ]; then
 else
 
 	print_header
-	echo [ERROR] Backupset config -s is empty
+	echo [ERROR] Backup name -n is empty
 	echo
 	print_help	
 	exit 1
@@ -228,7 +227,6 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 	DEST_KEYFILE=root/backupscript/id_ed25519
 	chown root:root ${DEST_KEYFILE}
 	chmod 600 ${DEST_KEYFILE}
-	ls -alF /root/backupscript/
    
 	SSH_KEY='-i '${DEST_KEYFILE}		
 	echo "-- SSH_KEY: ${SSH_KEY}"
