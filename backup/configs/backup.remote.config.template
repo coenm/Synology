@@ -9,19 +9,5 @@
 # For remote communication, SSH is used.
 DEST_IS_REMOTE=1
 
-
-#
-#
-# If DEST_IS_REMOTE is set to 0 (ie, it is a local backup), you can leave the following variables empty as they are.
-# 
-#
-
-
-# Hostname of remote machine. Can be IP4 or hostname.
-DEST_HOST=sample.host.com
-
 # Keyfile for authenticating DEST_USER on the DEST_HOST. This should point to an existing private key file.
 DEST_KEYFILE=/volume1/backup/key/id_rsa
-
-# Destination SSH port of the remote machine. Normally SSH runs on port 22 but this property allows others.
-DEST_PORT=2222

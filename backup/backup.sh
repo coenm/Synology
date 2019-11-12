@@ -47,7 +47,7 @@ print_help()
 {
 	echo "Usage:																	"
 	echo "																			"
-	echo "	$0 -n name -d <destination config> [-c -p -v -q -h]	             		"
+	echo "	$0 -n name -d <destination config> [-H <host> [-P <port>]] [-c -p -v -q -h]	"
 	echo "																			"
 	echo "	-h = Help																"
 	echo "       List this help menu												"
@@ -70,7 +70,14 @@ print_help()
 	echo "       Run rsync command with -q switch to suppress all output			"
 	echo "       except errors														"
 	echo "																			"
+	echo "	-H = Host name (for remote backup)										"
+	echo "       Hostname of remote machine. Can be IP4 or hostname.		     	"
+	echo "																			"
+	echo "	-P = SSH Port (for remote backup)										"
+	echo "       Destination SSH port of the remote machine (default 22).	     	"
+	echo "																			"
 	echo "----------------------------------------------------------------------------"
+# . Normally SSH runs on port 22 but this property allows others.
 }
 
 CONFIG_LOG_DIR_BUSY=/logs/busy
@@ -92,11 +99,12 @@ echo RSYNC_EXCLUDE_FILES: ${RSYNC_EXCLUDE_FILES}
 #Wrapping up the excludes
 RSYNC_EXCLUDES="$RSYNC_EXCLUDE_DSM $RSYNC_EXCLUDE_MAC $RSYNC_EXCLUDE_FILES"
 
+opt_cap_p=22
 
 #***************************************************************
 # Get Options from the command line  
 #***************************************************************
-while getopts "n:d:hcvpq" options
+while getopts "n:d:H:P:hcvpq" options
 do
 	case $options in 
 		c ) RSYNC_MODE_CHECKSUM='--checksum ';;
@@ -106,10 +114,15 @@ do
 		
 		n ) opt_n=$OPTARG;;
 		d ) opt_d=$OPTARG;;
-		e ) opt_e=$OPTARG;;
-		l ) opt_l=$OPTARG;;
+
+		H ) 
+		    opt_cap_h=$OPTARG
+		    DO_REMOTE=1
+		    ;;
+		P ) opt_cap_p=$OPTARG;;
 
 		h ) opt_h=1;;
+		* ) opt_h=1;;
 	esac
 done
 
@@ -204,14 +217,17 @@ fi
 #***************************************************************
 echo Started at $DATETIME_START using backupscript $VERSION >> ${LOG_FILE_BUSY}
 
+echo "-- DO_REMOTE: ${DO_REMOTE}"
+echo "-- opt_cap_h: ${opt_cap_h}"
+echo "-- opt_cap_p: ${opt_cap_p}"
 
 if [ $DEST_IS_REMOTE -eq 1 ]; then
 
-	if [ $DEST_PORT -ne 22 ]; then
-		SSH_PORT='-p '$DEST_PORT
-	fi
-	
-			
+	DEST_HOST=${opt_cap_h}
+
+	DEST_PORT=${opt_cap_p}
+	SSH_PORT='-p '$DEST_PORT	
+
 	# Check if private key file exists. If not -> quit backup.
 	if [ ! -f ${DEST_KEYFILE} ]; then
 		echo [ERROR] Cannot backup to remote because the private key ${DEST_KEYFILE} does not exist.
