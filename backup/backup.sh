@@ -164,7 +164,10 @@ if [ $opt_s ]; then
 		print_header
 		echo [ERROR] Backupset config ${BACKUPSET_CONFIG_FILE} does not exist
 		exit 1
-	fi	
+	fi
+
+    # Backup directory. Must be absolute path. Directory must exists and the executing user of the script should have read rights.
+	BACKUP_SOURCE_DIR=/source	
 
 	## Create the destination path (also the escaped variant)
 	DESTINATION_DIR=${BACKUP_DIR}/${BACKUP_NAME}

@@ -7,6 +7,3 @@
 
 # The BACKUP_NAME should be a folder in DEST_BACKUP_DIR. Ie. ${DEST_BACKUP_DIR}/${BACKUP_NAME}
 BACKUP_NAME="Photoalbum"
-
-# Backup directory. Must be absolute path. Directory must exists and the executing user of the script should have read rights.
-BACKUP_SOURCE_DIR=/volume1/Photoalbum
