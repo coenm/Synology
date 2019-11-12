@@ -218,7 +218,7 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 		SSH_PORT='-p '$DEST_PORT
 	fi
 	
-		
+			
 	# Check if private key file exists. If not -> quit backup.
 	if [ ! -f ${DEST_KEYFILE} ]; then
 		echo [ERROR] Cannot backup to remote because the private key ${DEST_KEYFILE} does not exist.
@@ -244,15 +244,17 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 
 	echo Create working dir for backup >> ${LOG_FILE_BUSY}
 	
-			
-	echo "-- SSH_PORT: ${SSH_PORT}"		
-	echo "-- DEST_USER: ${DEST_USER}"		
+	# Remote username. This user should exist on the remote machine, should have SSH access with public key authorization enabled.
+	DEST_USER=$SSH_USERNAME
+
+	echo "-- SSH_PORT: ${SSH_PORT}"
+	echo "-- DEST_USER: ${DEST_USER}"
 	echo "-- DEST_HOST: ${DEST_HOST}"
 
 	ssh \
 		"-o StrictHostKeyChecking=false " $SSH_PORT $SSH_KEY ${DEST_USER}@${DEST_HOST} \
 		"mkdir -p \"$DESTINATION_DIR/incomplete/\" && mkdir -p \"$DESTINATION_DIR/partial/\""
-		
+
 	echo >> ${LOG_FILE_BUSY}
 	
 	echo Start RSync >> ${LOG_FILE_BUSY}

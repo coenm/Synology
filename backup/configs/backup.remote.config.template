@@ -20,9 +20,6 @@ DEST_IS_REMOTE=1
 # Hostname of remote machine. Can be IP4 or hostname.
 DEST_HOST=sample.host.com
 
-# Remote username. This user should exist on the remote machine, should have SSH access with public key authorization enabled.
-DEST_USER=backup_user
-
 # Keyfile for authenticating DEST_USER on the DEST_HOST. This should point to an existing private key file.
 DEST_KEYFILE=/volume1/backup/key/id_rsa
 

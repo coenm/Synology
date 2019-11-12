@@ -9,5 +9,4 @@
 
 - No need to configure private key path;
 - BACKUP_NAME as parameter;
-- Make sure private key has correct permissions (otherwise ssh will not load it);
 - generate KnownHost and remove the `-o StrictHostKeyChecking=false` ssh option.
