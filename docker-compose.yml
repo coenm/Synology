@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+
+  server:
+    image: coenm/server:latest
+    networks: 
+      - rsync
+    ports:
+      - "22222:22"
+    volumes:
+      - "/c/Users/coen/docker/ssh/:/tmp/.ssh:ro"
+      - "/c/Users/coen/docker/backup/:/backup/:rw"
+    build:
+      context: .
+      dockerfile: ./client.DOCKERFILE
+
+networks:
+  rsync:

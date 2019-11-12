@@ -223,6 +223,16 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 		print_help
 		exit 1
 	fi
+
+    # copy the private key to other directory
+	# make sure the permissions are okay and use that key.
+	mkdir -p /root/backupscript/
+	cp ${DEST_KEYFILE} root/backupscript/id_ed25519
+	DEST_KEYFILE=root/backupscript/id_ed25519
+	chown root:root ${DEST_KEYFILE}
+	chmod 600 ${DEST_KEYFILE}
+	ls -alF /root/backupscript/
+   
 	SSH_KEY='-i '${DEST_KEYFILE}		
 	echo "-- SSH_KEY: ${SSH_KEY}"
 			
@@ -266,7 +276,10 @@ if [ $DEST_IS_REMOTE -eq 1 ]; then
 	
 	ssh \
 		"-o StrictHostKeyChecking=false " $SSH_PORT $SSH_KEY ${DEST_USER}@${DEST_HOST} \
-		"cd \"$DESTINATION_DIR\" &&  mv incomplete/ $DATETIME_START/ && rm -rf current && ln -s $DATETIME_START current && rm -rf partial"
+		"cd \"$DESTINATION_DIR\" && mv incomplete/ $DATETIME_START/ && rm -rf current && ln -s $DATETIME_START current && rm -rf partial"
+
+
+	rm -rf ${DEST_KEYFILE}
 	
 else
 
