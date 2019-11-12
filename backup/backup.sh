@@ -47,12 +47,12 @@ print_help()
 {
 	echo "Usage:																	"
 	echo "																			"
-	echo "	$0 -s <source config> -d <destination config> [-c -p -v -q -h]			"
+	echo "	$0 -n name -d <destination config> [-c -p -v -q -h]	             		"
 	echo "																			"
 	echo "	-h = Help																"
 	echo "       List this help menu												"
 	echo "																			"
-	echo "	-s = Source of rsync backup												"
+	echo "	-n = Name of the backup (used as root folder in backup destination).    "
 	echo "																			"
 	echo "	-d = Destination type of the backup (remote or local)					"
 	echo "																			"
@@ -96,7 +96,7 @@ RSYNC_EXCLUDES="$RSYNC_EXCLUDE_DSM $RSYNC_EXCLUDE_MAC $RSYNC_EXCLUDE_FILES"
 #***************************************************************
 # Get Options from the command line  
 #***************************************************************
-while getopts "s:d:hcvpq" options
+while getopts "n:d:hcvpq" options
 do
 	case $options in 
 		c ) RSYNC_MODE_CHECKSUM='--checksum ';;
@@ -104,7 +104,7 @@ do
 		q ) RSYNC_MODE_QUIET='--quiet ';;
 		p ) RSYNC_MODE_PROGRESS='--progress ';;	
 		
-		s ) opt_s=$OPTARG;;
+		n ) opt_n=$OPTARG;;
 		d ) opt_d=$OPTARG;;
 		e ) opt_e=$OPTARG;;
 		l ) opt_l=$OPTARG;;
@@ -152,29 +152,13 @@ fi
 BACKUP_DIR=/backup
 
 #***************************************************************
-# Source
+# Name of backup
 #***************************************************************
-if [ $opt_s ]; then
+if [ ! -z $opt_n ]; then
+	# if [ $opt_n ]; then
 
-	BACKUPSET_CONFIG_FILE=backupset.${opt_s}.config
-	if [ -f ${CONFIG_DIR}/${BACKUPSET_CONFIG_FILE} ]; then
-		source ${CONFIG_DIR}/${BACKUPSET_CONFIG_FILE}
-		# TODO: check if the BACKUPSET_CONFIG_FILE file contains the required variables and check their values.
-	else
-		print_header
-		echo [ERROR] Backupset config ${BACKUPSET_CONFIG_FILE} does not exist
-		exit 1
-	fi
-
-    # Backup directory. Must be absolute path. Directory must exists and the executing user of the script should have read rights.
-	BACKUP_SOURCE_DIR=/source	
-
-	## Create the destination path (also the escaped variant)
-	DESTINATION_DIR=${BACKUP_DIR}/${BACKUP_NAME}
-	DESTINATION_DIR_ESCAPED=${DESTINATION_DIR// /\\ }
-
-	echo "-- DESTINATION_DIR: ${DESTINATION_DIR}"
-	echo "-- DESTINATION_DIR_ESCAPED: ${DESTINATION_DIR_ESCAPED}"
+	BACKUP_NAME=$opt_n
+	echo "-- BACKUP_NAME: ${BACKUP_NAME}"
 
 else
 
@@ -185,6 +169,16 @@ else
 	exit 1
 
 fi
+
+# Backup directory. Must be absolute path. Directory must exists and the executing user of the script should have read rights.
+BACKUP_SOURCE_DIR=/source	
+
+## Create the destination path (also the escaped variant)
+DESTINATION_DIR=${BACKUP_DIR}/${BACKUP_NAME}
+DESTINATION_DIR_ESCAPED=${DESTINATION_DIR// /\\ }
+
+echo "-- DESTINATION_DIR: ${DESTINATION_DIR}"
+echo "-- DESTINATION_DIR_ESCAPED: ${DESTINATION_DIR_ESCAPED}"
 
 
 #***************************************************************
