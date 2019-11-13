@@ -9,6 +9,15 @@ if [ -z ${SSH_USERNAME} ]; then
     exit 100
 fi
 
+if [ -z ${UID} ]; then
+    echo "UID environment variable not set."
+    exit 103
+fi
+
+if [ -z ${GID} ]; then
+    echo "GID environment variable not set."
+    exit 104
+fi
 
 if [[ ! -d "/home/${SSH_USERNAME}/" ]]; then
     echo home directory /home/${SSH_USERNAME}/ does not exist!
@@ -25,6 +34,9 @@ if [[ -z ${BACKUP_DESTINATION} ]]; then
     exit 200
 fi
 
+userdel -f -r ${SSH_USERNAME}
+groupadd -f -r -g ${GID} ${SSH_USERNAME}
+useradd -ms /bin/bash -r -g ${SSH_USERNAME} -u ${UID} ${SSH_USERNAME}
 
 # copy and set permissions.
 mkdir -p /home/${SSH_USERNAME}/.ssh
