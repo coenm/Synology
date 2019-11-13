@@ -1,0 +1,11 @@
+# More info at:
+# http://ss64.com/bash/rsync.html#exclude
+#
+
+# Skip specific Mac OS 
+.Trashes/
+.TemporaryItems/
+
+# Synology DSM
+@eaDir/
+#recycle/ 

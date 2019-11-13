@@ -8,11 +8,7 @@ VERSION="2019.11.11"
 
 DATETIME_START="$(date +"%Y.%m.%d-%H.%M.%S")"
 
-# Default backup excludes and default options.
-RSYNC_EXCLUDE_DSM='--exclude=#recycle/ --exclude=@eaDir/'
-RSYNC_EXCLUDE_MAC='--exclude=.Trashes/ --exclude=.TemporaryItems/'
 RSYNC_DEFAULT_OPTIONS='--hard-links --delete --delete-excluded --archive --chmod=oga-w'
-
 
 # Get absolute path this script is in and use this path as a base for all other (relatve) filenames.
 # !! Please make sure there are no spaces inside the path !!
@@ -98,7 +94,7 @@ RSYNC_EXCLUDE_FILES=${RSYNC_EXCLUDE_FILES_ARRAY[@]}
 echo RSYNC_EXCLUDE_FILES: ${RSYNC_EXCLUDE_FILES}
 
 #Wrapping up the excludes
-RSYNC_EXCLUDES="$RSYNC_EXCLUDE_DSM $RSYNC_EXCLUDE_MAC $RSYNC_EXCLUDE_FILES"
+RSYNC_EXCLUDES="$RSYNC_EXCLUDE_FILES"
 
 opt_cap_p=22
 

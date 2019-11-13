@@ -40,20 +40,3 @@ RUN chmod +x /bin/backup/backup.sh
 
 ENTRYPOINT ["/bin/backup/backup.sh"]
 CMD ["-h"]
-
-
-# https://github.com/moby/moby/issues/6396
-# http://www.inanzzz.com/index.php/post/qdil/creating-a-ssh-server-with-openssh-by-using-docker-compose-and-connecting-to-it-with-php
-
-# docker exec -ti server /bin/bash
-# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --rm coenm/server:v1.9
-# docker run -d -p 22222:22 --name server --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/backup/",target="/backup/" --rm coenm/server:v1.10
-
-# docker run --name client --mount type=bind,source="/c/Users/coen/docker/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/c/Users/coen/docker/source/",target="/source/",readonly --rm coenm/client:1.0
-
-# docker desktop
-# docker run -d -p 22222:22 --name server --mount type=bind,source="D:/Docker/BackupServer/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="D:/Docker/BackupServer/backup/",target="/backup/" --rm coenm/server:2.0
-# docker run -d -p 22222:22 --name server --mount type=bind,source="/D/Docker/BackupServer/ssh/",target="/tmp/.ssh/",readonly --mount type=bind,source="/D/Docker/BackupServer/backup/",target="/backup/" --rm coenm/server:2.0
-
-
-# docker run -ti --name ubuntu --mount type=bind,source="/D/Docker/UbuntuShare",target="/WindowsShare/" ubuntu:latest /bin/bash
