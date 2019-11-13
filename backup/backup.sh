@@ -135,28 +135,6 @@ if [ $opt_h ]; then
 fi 
 
 
-# #***************************************************************
-# # Destination 
-# #***************************************************************
-# if [ $opt_d ]; then
-
-# 	DESTINATION_CONFIG_FILE=backup.${opt_d}.config
-# 	if [ -f ${CONFIG_DIR}/${DESTINATION_CONFIG_FILE} ]; then
-# 		source ${CONFIG_DIR}/${DESTINATION_CONFIG_FILE}
-# 		# TODO: check if the DESTINATION_CONFIG_FILE file contains the required variables and check their values.
-# 	else
-# 		print_header
-# 		echo [ERROR] Destination config ${DESTINATION_CONFIG_FILE} does not exist.
-# 		exit 1
-# 	fi
-# else
-# 	print_header
-# 	echo [ERROR] Destination config -d is empty
-# 	echo
-# 	print_help
-# 	exit 1	
-# fi
-	
 # Destination base directory to store the backup.
 # Should be an absolute path. If the backup is on a remote machine. Do not enter a path like user@host:/path/to/store/backup
 BACKUP_DIR=/backup

@@ -13,7 +13,6 @@
 - generate KnownHost and remove the `-o StrictHostKeyChecking=false` ssh option;
 - move excludes to file.
 
-
 https://github.com/moby/moby/issues/6396
 
 http://www.inanzzz.com/index.php/post/qdil/creating-a-ssh-server-with-openssh-by-using-docker-compose-and-connecting-to-it-with-php
