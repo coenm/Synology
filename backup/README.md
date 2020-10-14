@@ -66,4 +66,6 @@ docker run -d -p 22222:22 --name server --mount type=bind,source="/D/Docker/Back
 
 docker volume create rsync_data
 
+docker system df -v
+
 ```
